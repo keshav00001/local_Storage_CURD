@@ -1,38 +1,100 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  border-bottom: 1px solid #dddddd;
+  padding: 12px 20px;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+}
+header button {
+  border: 1px solid #f2f2f2;
+  outline: none;
+  background-color: #f2f2f2;
+  color: #34547b;
+  font-size: 13px;
+  padding: 7px 20px;
+  border-radius: 5px;
+  font-weight: 600;
 }
 
-.App-link {
-  color: #61dafb;
+.upload-document {
+  background-color: #fbfdff;
+  padding: 30px 0;
+  height: calc(100% - 61px);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+label {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 5px;
+  color: #3d434b;
+}
+
+.form-group {
+  position: relative;
+}
+.form-group .check-icon {
+  color: #30ad0a;
+  position: absolute;
+  bottom: 2px;
+  right: 5px;
+  font-size: 22px;
+}
+.form-control {
+  height: 44px;
+  font-size: 15px;
+  line-height: 32px;
+}
+
+input[type="file"] {
+  padding-right: 30px;
+}
+
+h2 {
+  font-size: 25px;
+  color: #33465d;
+  font-weight: 600;
+  margin: 0;
+}
+
+.upload-lists {
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  padding: 15px 20px 20px 20px;
+  border-radius: 5px;
+  margin: 15px 0;
+}
+
+.add-more-block {
+  margin: 15px 0;
+  text-align: right;
+}
+.add-more-block .btn {
+  font-size: 13px;
+}
+
+.upload-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+.upload-heading .btn-secondary {
+  background-color: #b61e20;
+  border-color: #b61e20;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+.upload-heading .btn-secondary i {
+  font-size: 18px;
+  margin-right: 5px;
+}
+.submit-button .btn {
+  font-size: 15px;
+  text-transform: uppercase;
+  font-weight: 600;
+  width: 150px;
+  height: 44px;
+  background-color: #1a4e95;
+  border-color: #1a4e95;
 }
