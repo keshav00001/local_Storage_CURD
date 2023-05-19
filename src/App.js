@@ -5,12 +5,15 @@ import UploadAllDocument from "./pages/UploadAllDocument";
 import "./App.css";
 
 function App() {
+
   return (
-    <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/upload-document" element={<UploadDocument />} />
-      <Route path="/upload-all-document" element={<UploadAllDocument />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/upload-document" element={<UploadDocument />} />
+        <Route path="/upload-all-document" element={<UploadAllDocument />} />
+      </Routes>
+    </>
   );
 }
 

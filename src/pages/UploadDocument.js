@@ -7,8 +7,23 @@ export default function UploadDocument(props) {
   const [uploadFiles, setUploadFiles] = useState([1]);
 
   const handleUploadMore = () => {
-    setUploadFiles([...uploadFiles, 1]);
+    setUploadFiles([...uploadFiles, +1]);
+    console.log("...uploadFiles...", uploadFiles);
   };
+
+  const removeInputFields = (i) => {
+    // console.log("..removeInputFields...", e)
+    // var array = [...uploadFiles];
+    // var index = array.indexOf(e)
+    // if (index !== -1) {
+    //   array.splice(index, 1);
+    //   setUploadFiles({ array });
+    // }
+    let rows = [...uploadFiles];
+    rows.splice(i, 1);
+    setUploadFiles(rows);
+
+  }
 
   return (
     <>
@@ -17,18 +32,23 @@ export default function UploadDocument(props) {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <div className="upload-heading">
-                <h2>Upload All Documents</h2>
-                <Link to="/upload-all-document" className="btn btn-secondary">
-                  <i className="bi bi-cloud-arrow-up"></i> Upload All Document
-                </Link>
-              </div>
               <div>
-                {uploadFiles.map((item, index) => (
-                  <Upload />
-                ))}
+                {uploadFiles.map((item, index) => {
+                  return (
+                    <>
+                      <div key={index}>
+                        {(uploadFiles.length !== 1) ? <button className="btn btn-outline-danger" onClick={() => removeInputFields(index)}>x {index}</button> : ''}
+                        <Upload
+                          key={index}
+                        // uploadFiles={uploadFiles}
+                        // indexNos={index}
+                        />
+                      </div>
+                    </>
+                  )
+                })}
               </div>
-              <div className="add-more-block">
+              {/* <div className="add-more-block">
                 <button
                   className="btn btn-primary btn-sm"
                   onClick={() => handleUploadMore()}
@@ -38,7 +58,7 @@ export default function UploadDocument(props) {
               </div>
               <div className="submit-button">
                 <button className="btn btn-primary btn-lg">Submit</button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
