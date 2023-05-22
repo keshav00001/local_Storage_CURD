@@ -98,3 +98,24 @@ h2 {
   background-color: #1a4e95;
   border-color: #1a4e95;
 }
+.upload-lists.close-icon {
+  position: relative;
+  top: -18px;
+  right: 0;
+  left: 16px;
+}
+
+.closeDiv {
+  text-align: end;
+  height: 0px;
+  position: relative;
+  bottom: 18px;
+  left: 18px;
+  font-size: 25px;
+  opacity: 0.7;
+}
+.errorForm {
+  color: red;
+  font-size: 14px;
+  padding-left: 3px;
+}
