@@ -118,4 +118,23 @@ h2 {
   color: red;
   font-size: 14px;
   padding-left: 3px;
+  padding-top: 3px;
+}
+.removeCol {
+  height: 44px;
+  font-size: 15px;
+  line-height: 110px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.spanIconEye {
+  font-size: 24px;
+  color: #3591cb;
+  cursor: pointer;
+}
+.spanIconDel {
+  font-size: 25px;
+  color: #e13f3f;
+  cursor: pointer;
 }
