@@ -21,7 +21,7 @@ const DocPreviewModal = (props) => {
             </Modal.Header>
             <Modal.Body>
                 {/* <p>{msg}</p> */}
-                <Image src={imgshow} className="img-fluid" />
+                {imgshow ? <Image src={imgshow} className="img-fluid" /> : <p>Please Upload your document</p>}
 
             </Modal.Body>
             <Modal.Footer>

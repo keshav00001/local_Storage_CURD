@@ -138,7 +138,32 @@ h2 {
   color: #e13f3f;
   cursor: pointer;
 }
-.loadingCard {
-  display: block;
-  text-align-last: center;
+
+.loader {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.6);
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loader div {
+  background-color: #ffffff;
+  padding: 15px 20px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  text-align: center;
+}
+.loader div h3 {
+  margin: 0;
+  font-size: 20px;
+  padding: 10px 0;
+  margin-bottom: -5px;
+  background: #fff;
+  position: relative;
+  z-index: 99;
 }
