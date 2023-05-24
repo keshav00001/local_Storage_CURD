@@ -1,24 +1,129 @@
-import React, { useState } from "react";
-import { Formik, Form, useField, useFormikContext } from "formik";
-import * as Yup from "yup";
+import React, { useContext, useEffect, useState } from "react";
 import DocSubmitModal from "./DocSubmitModal";
 import DocPreviewModal from "./DocPreviewModal";
-// import styled from "@emotion/styled";
-// import "./styles.css";
-// import "./formValidationFormik.css";
-// import "../styles/formValidationFormik.css";
+import { base_url, app_id, app_name } from "../services/api.config";
+import axios from "axios";
+import { AppContext } from "../context/AppContext";
+import Loading from "./Loader";
+
 export default function Upload(props) {
   const [uploadCheck, setUploadCheck] = useState(false);
+  const [documentList, setdocumentList] = useState([]);
   const [password, setPassword] = useState("");
   const [selectDocument, setselectDocument] = useState("");
   const [uploadfile, setUploadfile] = useState("");
   const [modalShow, setModalShow] = React.useState(false);
+  const [loadingVisible, setLoadingVisible] = React.useState(false);
   const [previewShow, setPreviewShow] = React.useState(false);
   const [filesUpload, setfilesUpload] = useState();
+  const { paramsApp } = useContext(AppContext);
 
   const [formValues, setFormValues] = useState([
     { selectDocument: "", uploadfile: "", password: "" },
   ]);
+
+  useEffect(() => {
+    documentData();
+  }, []);
+
+  const documentData = async () => {
+    let config = {
+      method: "get",
+      url: base_url + "/v1/api/registration/dropdown",
+      headers: {
+        "Content-Type": "application/json",
+        "x-application-id": app_id,
+        "x-application-name": app_name,
+      },
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        setdocumentList(response.data?.result?.doc_type);
+        // console.log(JSON.stringify(response.data.result.doc_type));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const formUploadData = (value) => {
+    let ddd = value;
+
+    console.log("..dsds. value.", ddd);
+
+    let tokenInfo = paramsApp[0];
+    let uidInfo = paramsApp[1];
+    let loanInfo = paramsApp[2];
+    console.log("..dsds..", tokenInfo[0], tokenInfo[1]);
+
+    var formdata = new FormData();
+
+    formdata.append("loan_id", loanInfo[1]);
+    formdata.append("uid", uidInfo[1]);
+    formdata.append("type", ddd.selectDocument);
+    formdata.append("group", "");
+    formdata.append("password", "");
+    formdata.append("fileKey", ddd.files[0]);
+
+    var requestOptions = {
+      method: "POST",
+      headers: {
+        "x-access-token": tokenInfo[1],
+        "x-application-id": app_id,
+        "x-application-name": app_name,
+      },
+      body: formdata,
+      dataType: "jsonp",
+    };
+
+    console.log("..dsds..", requestOptions);
+
+
+    fetch(base_url + "/v1/api/upload_multidoc", requestOptions)
+      .then((response) => response.json())
+      .then((result) =>
+        console.log("resul----------------------------", result)
+      )
+      .catch((error) => console.log("error", error));
+  };
+  const formUploadData2 = (formdata) => {
+    let ddd = formdata[0];
+    let tokenInfo = paramsApp[0];
+    let uidInfo = paramsApp[1];
+    let loanInfo = paramsApp[2];
+    console.log("..dsds..", tokenInfo[0], tokenInfo[1]);
+
+    var formdata = new FormData();
+
+    formdata.append("loan_id", loanInfo[1]);
+    formdata.append("uid", uidInfo[1]);
+    formdata.append("type", ddd.selectDocument);
+    formdata.append("group", "");
+    formdata.append("password", "");
+    formdata.append("fileKey", ddd.files[0]);
+
+    var requestOptions = {
+      method: "POST",
+      headers: {
+        "x-access-token": tokenInfo[1],
+        "x-application-id": app_id,
+        "x-application-name": app_name,
+      },
+      body: formdata,
+      dataType: "jsonp",
+    };
+
+    console.log("..dsds..", requestOptions);
+
+    fetch(base_url + "/v1/api/upload_multidoc", requestOptions)
+      .then((response) => response.json())
+      .then((result) =>
+        console.log("resul----------------------------", result)
+      )
+      .catch((error) => console.log("error", error));
+  };
 
   let addFormFields = () => {
     setFormValues([
@@ -31,9 +136,7 @@ export default function Upload(props) {
     let newFormValues = [...formValues];
     newFormValues.splice(i, 1);
     setFormValues(newFormValues);
-    console.log("...removeFormFields....", formValues);
   };
-
 
   let handleChange = (i, e) => {
     console.log("...handleChange...", e);
@@ -48,15 +151,14 @@ export default function Upload(props) {
       setFormValues(newFormValues);
       formValidation(formValues);
     }
-
   };
 
-
   let docPreview = (e) => {
+    console.log("...docPreview..", e);
     if (e.files.length != 0) {
       setfilesUpload(URL.createObjectURL(e.files[0]));
     }
-    setPreviewShow(true)
+    setPreviewShow(true);
   };
   const formValidation = (formValues) => {
     const data = [...formValues];
@@ -100,14 +202,19 @@ export default function Upload(props) {
 
   let handleSubmit = (event) => {
     event.preventDefault();
-    console.log("....form values...", formValues);
     // alert(JSON.stringify(formValues));
     const errorRes = formValidation(formValues);
     console.log("errorRes", errorRes);
     if (errorRes) {
       // api call
-      // alert("You are ready for submit");
+      let formOfData = formValues;
+      console.log(formOfData);
+      for (let i = 0; i <= formOfData.length - 1; i++) {
+        setLoadingVisible(true);
+        formUploadData(formOfData[i]);
+      }
       setModalShow(true);
+      setLoadingVisible(false);
     } else {
       // error msg
     }
@@ -118,7 +225,7 @@ export default function Upload(props) {
       <div>
         {formValues.map((element, index) => (
           <div className="upload-lists" key={index}>
-            <form onSubmit={handleSubmit} >
+            <form onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-md-4">
                   <div className="form-group">
@@ -130,6 +237,10 @@ export default function Upload(props) {
                       onChange={(e) => handleChange(index, e)}
                     >
                       <option>Select Document</option>
+                      {documentList.map((data) => (
+                        <option key={data}>{data}</option>
+                      ))}
+                      {/* <option>Select Document</option>
                       <option>EMI Report</option>
                       <option>OCR Aadhaar</option>
                       <option>OCR PAN Card</option>
@@ -137,7 +248,7 @@ export default function Upload(props) {
                       <option>Physical Verification Details</option>
                       <option>Back Aadhaar</option>
                       <option>DL</option>
-                      <option>Voter ID</option>
+                      <option>Voter ID</option> */}
                     </select>
                     <div className="errorForm">
                       {element.selectDocumentCheck}
@@ -150,7 +261,7 @@ export default function Upload(props) {
                     <input
                       className="form-control"
                       id="imgs"
-                      type='file'
+                      type="file"
                       accept="image/png, image/jpeg,.txt,.doc"
                       name="uploadfile"
                       // value={element.uploadfile || ""}
@@ -179,7 +290,10 @@ export default function Upload(props) {
                 </div>
                 <div className="col-md-1">
                   <div className="removeCol">
-                    <span className="spanIconEye" onClick={() => docPreview(element)}>
+                    <span
+                      className="spanIconEye"
+                      onClick={() => docPreview(element)}
+                    >
                       <i className="bi bi-eye-fill"></i>
                     </span>
                     {formValues.length !== 1 ? (
@@ -220,19 +334,25 @@ export default function Upload(props) {
         </button>
       </div>
 
-      {modalShow && <DocSubmitModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        msg="You are ready for Submit"
-      />
-      }
-      {previewShow && <DocPreviewModal
-        show={previewShow}
-        onHide={() => setPreviewShow(false)}
-        imgshow={filesUpload}
-      />
-      }
+      {modalShow && (
+        <DocSubmitModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          msg="You are ready for Submit"
+        />
+      )}
+      {previewShow && (
+        <DocPreviewModal
+          show={previewShow}
+          onHide={() => setPreviewShow(false)}
+          imgshow={filesUpload}
+        />
+      )}
 
+      {loadingVisible && <Loading
+        loaderVisible={loadingVisible}
+        msg={"Your docs uploding"}
+      />}
     </>
   );
 }

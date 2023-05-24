@@ -138,3 +138,7 @@ h2 {
   color: #e13f3f;
   cursor: pointer;
 }
+.loadingCard {
+  display: block;
+  text-align-last: center;
+}
