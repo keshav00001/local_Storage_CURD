@@ -197,15 +197,7 @@ export default function Upload(props) {
                       {documentList.map((data) => (
                         <option key={data}>{data}</option>
                       ))}
-                      {/* <option>Select Document</option>
-                      <option>EMI Report</option>
-                      <option>OCR Aadhaar</option>
-                      <option>OCR PAN Card</option>
-                      <option>Underwriting Detail</option>
-                      <option>Physical Verification Details</option>
-                      <option>Back Aadhaar</option>
-                      <option>DL</option>
-                      <option>Voter ID</option> */}
+
                     </select>
                     <div className="errorForm">
                       {element.selectDocumentCheck}

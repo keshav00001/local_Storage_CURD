@@ -168,3 +168,6 @@ h2 {
   position: relative;
   z-index: 99;
 }
+.modal-body {
+  text-align: center;
+}
