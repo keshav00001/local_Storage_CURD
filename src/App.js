@@ -12,19 +12,21 @@ function App() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { paramsApp, setParamsApp } = useContext(AppContext);
 
-  const params = [];
+  // const params = [];
 
-  searchParams.forEach((value, key) => {
-    params.push([key, value]);
-  });
+  // searchParams.forEach((value, key) => {
+  //   params.push([key, value]);
+  // });
 
+
+  const params = Object.fromEntries([...searchParams]);
   // console.log(params);
 
   useEffect(() => {
     setParamsApp(params);
+    let myWindow = window.open();
   }, []);
 
-  // console.log("context set value....", paramsApp);
 
   return (
     <>
