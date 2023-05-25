@@ -10,11 +10,11 @@ export default function Upload(props) {
   const [uploadCheck, setUploadCheck] = useState(false);
   const [documentList, setdocumentList] = useState([]);
   const [password, setPassword] = useState("");
-  const [selectDocument, setselectDocument] = useState("");
   const [uploadfile, setUploadfile] = useState("");
   const [modalShow, setModalShow] = React.useState(false);
   const [loadingVisible, setLoadingVisible] = React.useState(false);
   const [previewShow, setPreviewShow] = React.useState(false);
+  const [selectDocType, setselectDocType] = useState("");
   const [filesUpload, setfilesUpload] = useState();
   const { paramsApp } = useContext(AppContext);
 
@@ -53,7 +53,7 @@ export default function Upload(props) {
     setLoadingVisible(true);
     let ddd = value;
 
-    // console.log("..dsds. value.", ddd);
+    console.log("..dsds. value.", ddd);
 
     var formdata = new FormData();
 
@@ -74,7 +74,7 @@ export default function Upload(props) {
       body: formdata,
       dataType: "jsonp",
     };
-
+    console.log("...requestOptions..")
     fetch(base_url + "/v1/api/upload_multidoc", requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -83,7 +83,7 @@ export default function Upload(props) {
         if (index == length) {
           setLoadingVisible(false);
           if (loadingVisible == false) {
-            window.location.reload();
+            // window.location.reload();
           }
         }
       })
@@ -118,10 +118,17 @@ export default function Upload(props) {
   };
 
   let docPreview = (e) => {
+    console.log("...eee...", e);
     if (e.uploadfile != "") {
       if (e.files.length != 0) {
+        console.log("...eee...", e.files[0].type);
+
+        setselectDocType(e.files[0].type)
         setfilesUpload(URL.createObjectURL(e.files[0]));
       }
+      console.log(".......", filesUpload);
+      const iframe = document.querySelector("iframe");
+      if (iframe?.src) iframe.src = filesUpload;
       setPreviewShow(true);
     } else {
       setPreviewShow(true);
@@ -212,7 +219,7 @@ export default function Upload(props) {
                       className="form-control"
                       id="imgs"
                       type="file"
-                      accept="image/png, image/jpeg,.txt,.doc"
+                      accept="image/png, image/jpeg,.txt,.doc,.pdf"
                       name="uploadfile"
                       // value={element.uploadfile || ""}
                       onChange={(e) => handleChange(index, e)}
@@ -237,6 +244,7 @@ export default function Upload(props) {
                       onChange={(e) => handleChange(index, e)}
                     />
                   </div>
+
                 </div>
                 <div className="col-md-1">
                   <div className="removeCol">
@@ -296,6 +304,7 @@ export default function Upload(props) {
           show={previewShow}
           onHide={() => setPreviewShow(false)}
           imgshow={filesUpload}
+          filepreviewtype={selectDocType}
         />
       )}
 
