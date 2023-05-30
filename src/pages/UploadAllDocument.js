@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
 import Upload from "../components/Upload";
-import { Link } from "react-router-dom";
 
 export default function UploadAllDocument(props) {
   return (

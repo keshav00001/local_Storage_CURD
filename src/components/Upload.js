@@ -5,13 +5,13 @@ import { base_url, app_id, app_name } from "../services/api.config";
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
 import Loading from "./Loader";
+import Swal from "sweetalert2";
 
 export default function Upload(props) {
   const [uploadCheck, setUploadCheck] = useState(false);
   const [documentList, setdocumentList] = useState([]);
-  const [password, setPassword] = useState("");
-  const [uploadfile, setUploadfile] = useState("");
   const [modalShow, setModalShow] = React.useState(false);
+  const [docError, setDocError] = React.useState(false);
   const [loadingVisible, setLoadingVisible] = React.useState(false);
   const [previewShow, setPreviewShow] = React.useState(false);
   const [selectDocType, setselectDocType] = useState("");
@@ -25,6 +25,20 @@ export default function Upload(props) {
   useEffect(() => {
     documentData();
   }, []);
+
+  const successAlert = () => {
+    Swal.fire({
+      title: 'congratulations!',
+      text: 'You document uploaded successfully.',
+      icon: 'success'
+    });
+    // window.location.reload();
+    setFormValues([
+      { selectDocument: "", uploadfile: "", password: "" },
+    ])
+
+  }
+
 
   const documentData = async () => {
 
@@ -49,46 +63,7 @@ export default function Upload(props) {
       });
   };
 
-  const formUploadData = (value, index, length) => {
-    setLoadingVisible(true);
-    let ddd = value;
 
-    console.log("..dsds. value.", ddd);
-
-    var formdata = new FormData();
-
-    formdata.append("loan_id", paramsApp.loan_id);
-    formdata.append("uid", paramsApp.uid);
-    formdata.append("type", ddd.selectDocument);
-    formdata.append("group", "");
-    formdata.append("password", "");
-    formdata.append("fileKey", ddd.files[0]);
-
-    var requestOptions = {
-      method: "POST",
-      headers: {
-        "x-access-token": paramsApp?.token,
-        "x-application-id": app_id,
-        "x-application-name": app_name,
-      },
-      body: formdata,
-      dataType: "jsonp",
-    };
-    console.log("...requestOptions..")
-    fetch(base_url + "/v1/api/upload_multidoc", requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log("resul----------------------------", result);
-
-        if (index == length) {
-          setLoadingVisible(false);
-          if (loadingVisible == false) {
-            // window.location.reload();
-          }
-        }
-      })
-      .catch((error) => console.log("error", error));
-  };
 
   let addFormFields = () => {
     setFormValues([
@@ -160,22 +135,65 @@ export default function Upload(props) {
     return valid;
   };
 
-  let handleSubmit = (event) => {
+  let handleSubmit = async (event) => {
     event.preventDefault();
     const errorRes = formValidation(formValues);
-    // console.log("errorRes", errorRes);
     if (errorRes) {
-      // api call
+      setLoadingVisible(true);
       let formOfData = formValues;
       for (let i = 0; i <= formOfData.length - 1; i++) {
-        setLoadingVisible(true);
         formUploadData(formOfData[i], i, formOfData.length - 1);
       }
-      // setModalShow(true);
-    } else {
-      // error msg
+
     }
   };
+
+  const formUploadData = (value, index, length) => {
+    let ddd = value;
+
+    console.log("..dsds. value.", ddd);
+
+    var formdata = new FormData();
+
+    formdata.append("loan_id", paramsApp.loan_id);
+    formdata.append("uid", paramsApp.uid);
+    formdata.append("type", ddd.selectDocument);
+    formdata.append("group", "");
+    formdata.append("password", "");
+    formdata.append("fileKey", ddd.files[0]);
+
+    var requestOptions = {
+      method: "POST",
+      headers: {
+        "x-access-token": paramsApp?.token,
+        "x-application-id": app_id,
+        "x-application-name": app_name,
+      },
+      body: formdata,
+      dataType: "jsonp",
+    };
+    console.log("...requestOptions..")
+    fetch(base_url + "/v1/api/upload_multidoc", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("resul----------------------------", result);
+        if (result.success == true) {
+          if (index == length) {
+            setLoadingVisible(false);
+            if (loadingVisible == false) {
+              successAlert();
+            }
+          }
+        } else {
+          setLoadingVisible(false);
+          setModalShow(true)
+          setDocError(result?.result + " " + ddd.selectDocument)
+
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
 
   return (
     <>
@@ -213,7 +231,7 @@ export default function Upload(props) {
                       type="file"
                       accept="image/png, image/jpeg,.txt,.doc,.pdf"
                       name="uploadfile"
-                      // value={element.uploadfile || ""}
+                      // value={element?.uploadfile}
                       onChange={(e) => handleChange(index, e)}
                     />
                     <div className="errorForm">{element.uploadfileCheck}</div>
@@ -288,7 +306,7 @@ export default function Upload(props) {
         <DocSubmitModal
           show={modalShow}
           onHide={() => setModalShow(false)}
-          msg="You document has submitted successfully !"
+          msg={docError}
         />
       )}
       {previewShow && (

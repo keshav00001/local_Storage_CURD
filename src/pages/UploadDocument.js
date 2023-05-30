@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import Header from "../components/Header";
 import Upload from "../components/Upload";
-import { Link } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 
 
@@ -23,7 +22,6 @@ export default function UploadDocument(props) {
           <div className="row">
             <div className="col-md-12">
               <div className="upload-heading">
-                {/* <h2>Upload All Documents</h2> */}
                 <h4>{paramsApp?.username} - {paramsApp?.loan_id} </h4>
               </div>
               <div>
