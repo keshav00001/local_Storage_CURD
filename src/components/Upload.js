@@ -8,7 +8,6 @@ import Loading from "./Loader";
 import Swal from "sweetalert2";
 
 export default function Upload(props) {
-  const [uploadCheck, setUploadCheck] = useState(false);
   const [documentList, setdocumentList] = useState([]);
   const [modalShow, setModalShow] = React.useState(false);
   const [docError, setDocError] = React.useState(false);
@@ -30,12 +29,16 @@ export default function Upload(props) {
     Swal.fire({
       title: 'congratulations!',
       text: 'You document uploaded successfully.',
-      icon: 'success'
+      icon: 'success',
+      allowOutsideClick: false,
+      confirmButtonText: "OK",
+    }).then((result) => {
+      if (result.value) {
+        window.location.reload();
+      } else {
+      }
     });
-    // window.location.reload();
-    setFormValues([
-      { selectDocument: "", uploadfile: "", password: "" },
-    ])
+
 
   }
 
@@ -93,15 +96,12 @@ export default function Upload(props) {
   };
 
   let docPreview = (e) => {
-    console.log("...eee...", e);
-    if (e.uploadfile != "") {
-      if (e.files.length != 0) {
-        console.log("...eee...", e.files[0].type);
-
+    if (e.uploadfile !== "") {
+      if (e.files.length !== 0) {
         setselectDocType(e.files[0].type)
         setfilesUpload(URL.createObjectURL(e.files[0]));
       }
-      console.log(".......", filesUpload);
+      // console.log(".......", filesUpload);
       const iframe = document.querySelector("iframe");
       if (iframe?.src) iframe.src = filesUpload;
       setPreviewShow(true);
@@ -114,7 +114,7 @@ export default function Upload(props) {
     let valid = true;
     for (let index = 0; index < data.length; index++) {
       // const element = data[index];
-      if (data[index].selectDocument == "") {
+      if (data[index].selectDocument === "") {
         data[index].selectDocumentCheck = "Please select your document";
         valid = false;
       } else {
@@ -122,7 +122,7 @@ export default function Upload(props) {
         valid = true;
       }
 
-      if (data[index].uploadfile == "") {
+      if (data[index].uploadfile === "") {
         data[index].uploadfileCheck = "Please upload file required";
         valid = false;
       } else {
@@ -151,7 +151,7 @@ export default function Upload(props) {
   const formUploadData = (value, index, length) => {
     let ddd = value;
 
-    console.log("..dsds. value.", ddd);
+    // console.log("..dsds. value.", ddd);
 
     var formdata = new FormData();
 
@@ -172,15 +172,14 @@ export default function Upload(props) {
       body: formdata,
       dataType: "jsonp",
     };
-    console.log("...requestOptions..")
     fetch(base_url + "/v1/api/upload_multidoc", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log("resul----------------------------", result);
-        if (result.success == true) {
-          if (index == length) {
+        // console.log("resul----------------------------", result);
+        if (result.success === true) {
+          if (index === length) {
             setLoadingVisible(false);
-            if (loadingVisible == false) {
+            if (loadingVisible === false) {
               successAlert();
             }
           }
@@ -235,11 +234,7 @@ export default function Upload(props) {
                       onChange={(e) => handleChange(index, e)}
                     />
                     <div className="errorForm">{element.uploadfileCheck}</div>
-                    {uploadCheck && (
-                      <span className="check-icon">
-                        <i className="bi bi-check-lg"></i>
-                      </span>
-                    )}
+
                   </div>
                 </div>
                 <div className="col-md-3">
