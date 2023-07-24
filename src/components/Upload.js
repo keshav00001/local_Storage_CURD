@@ -151,7 +151,7 @@ export default function Upload(props) {
   const formUploadData = (value, index, length) => {
     let ddd = value;
 
-    // console.log("..dsds. value.", ddd);
+    // console.log("..dsds. value.", ddd.password);
 
     var formdata = new FormData();
 
@@ -159,7 +159,7 @@ export default function Upload(props) {
     formdata.append("uid", paramsApp.uid);
     formdata.append("type", ddd.selectDocument);
     formdata.append("group", "");
-    formdata.append("password", "");
+    formdata.append("password", ddd.password);
     formdata.append("fileKey", ddd.files[0]);
 
     var requestOptions = {
