@@ -171,3 +171,15 @@ h2 {
 .modal-body {
   text-align: center;
 }
+.modal_body_form {
+  text-align: left;
+  label {
+    padding-left: 3px;
+  }
+}
+.edit-btn {
+  cursor: pointer;
+}
+.delete-btn {
+  cursor: pointer;
+}

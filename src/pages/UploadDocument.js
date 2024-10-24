@@ -1,7 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Header from "../components/Header";
 import Upload from "../components/Upload";
 import { AppContext } from "../context/AppContext";
+import Datalist from "../components/Datalist";
+import DataView from "./DataView";
 
 
 export default function UploadDocument(props) {
@@ -11,6 +13,9 @@ export default function UploadDocument(props) {
   const handleUploadMore = () => {
     setUploadFiles([...uploadFiles, +1]);
   };
+  useEffect(() => {
+
+  }, [])
 
 
 
@@ -21,12 +26,8 @@ export default function UploadDocument(props) {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <div className="upload-heading">
-                <h4>{paramsApp?.username} - {paramsApp?.loan_id} </h4>
-              </div>
               <div>
-                <Upload
-                />
+                <Datalist />
               </div>
             </div>
           </div>

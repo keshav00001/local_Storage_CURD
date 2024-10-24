@@ -3,7 +3,6 @@ import Login from "./pages/Login";
 import UploadDocument from "./pages/UploadDocument";
 import UploadAllDocument from "./pages/UploadAllDocument";
 import "./App.css";
-import UploadLink from "./pages/UploadLink";
 import { useSearchParams } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { AppContext, AppProvider } from "./context/AppContext";
